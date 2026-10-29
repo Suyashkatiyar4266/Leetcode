@@ -43,36 +43,80 @@
 //BFS
 
 
+// class Solution {
+// public:
+//     int reachableNodes(int n, vector<vector<int>>& edges,
+//                        vector<int>& restricted) {
+//         vector<vector<int>> adj(n);
+//         vector<bool> visited(n, false);
+//         queue<int> q;
+
+//         for (auto& e : edges) {
+//             adj[e[0]].push_back(e[1]);
+//             adj[e[1]].push_back(e[0]);
+//         }
+
+//         for (int x : restricted)
+//             visited[x] = true;
+
+//         q.push(0);
+//         visited[0] = true;
+
+//         int count = 0;
+
+//         while (!q.empty()) {
+//             int node = q.front();
+//             q.pop();
+//             count++;
+
+//             for (int neighbor : adj[node]) {
+//                 if (!visited[neighbor]) {
+//                     visited[neighbor] = true;
+//                     q.push(neighbor);
+//                 }
+//             }
+//         }
+
+//         return count;
+//     }
+// };
+
+
+//Iterative DFS using a stack
+
+
 class Solution {
 public:
     int reachableNodes(int n, vector<vector<int>>& edges,
                        vector<int>& restricted) {
         vector<vector<int>> adj(n);
-        vector<bool> visited(n, false);
-        queue<int> q;
 
         for (auto& e : edges) {
             adj[e[0]].push_back(e[1]);
             adj[e[1]].push_back(e[0]);
         }
 
-        for (int x : restricted)
-            visited[x] = true;
+        vector<bool> blocked(n, false);
 
-        q.push(0);
-        visited[0] = true;
+        for (int x : restricted)
+            blocked[x] = true;
+
+        stack<int> st;
+        st.push(0);
+        blocked[0] = true;
 
         int count = 0;
 
-        while (!q.empty()) {
-            int node = q.front();
-            q.pop();
+        while (!st.empty()) {
+            int node = st.top();
+            st.pop();
+
             count++;
 
             for (int neighbor : adj[node]) {
-                if (!visited[neighbor]) {
-                    visited[neighbor] = true;
-                    q.push(neighbor);
+                if (!blocked[neighbor]) {
+                    blocked[neighbor] = true;
+                    st.push(neighbor);
                 }
             }
         }
