@@ -23,12 +23,30 @@
 // };
 
 
-//Using accumulated() and min_element()
+// //Using accumulated() and min_element()
+// class Solution{
+//     public:
+//     int minMoves(vector<int>& nums){
+//         int mn = *min_element(nums.begin(), nums.end());
+//         int sum = accumulate(nums.begin(),nums.end(),0);
+//         return sum-(nums.size()*mn);
+//     }
+// };
+
+
+//Single traversal approach
 class Solution{
     public:
     int minMoves(vector<int>& nums){
-        int mn = *min_element(nums.begin(), nums.end());
-        int sum = accumulate(nums.begin(),nums.end(),0);
-        return sum-(nums.size()*mn);
+        int mn = nums[0];
+        for(int x : nums){
+            if(x < mn)
+                mn = x;
+        }
+        int moves = 0;
+        for(int x : nums){
+            moves += x - mn;
+        }
+        return moves;
     }
 };
