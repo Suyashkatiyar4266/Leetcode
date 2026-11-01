@@ -41,37 +41,74 @@
 // };
 
 
-//Iterative using dummy node 
+// //Iterative using dummy node 
+// class Solution{
+//     public:
+//     ListNode* reverseKGroup(ListNode*head, int k){
+//         ListNode dummy(0);
+//         dummy.next = head;
+//         ListNode* groupPrev = &dummy;
+//         while(true){
+//             //Find kth node
+//             ListNode* kth = groupPrev;
+//             for(int i = 0; i < k && kth != NULL; i++){
+//                 kth = kth->next;
+//             }
+//             //Less than k nodes remaining
+//             if(kth == NULL)
+//                 break;
+//             ListNode* groupNext = kth->next;
+//             //Reverse current group
+//             ListNode* prev = groupNext;
+//             ListNode* curr = groupPrev->next;
+//             while(curr != groupNext){
+//                 ListNode* nextNode=curr->next;
+//                 curr->next = prev;
+//                 prev = curr;
+//                 curr = nextNode;
+//             }
+//         // Connect reversed group 
+//         ListNode* temp = groupPrev->next;
+//         groupPrev->next = kth;
+//         groupPrev = temp;
+//         }
+//         return dummy.next;
+//     }
+// };
+
+
+//Using Stack
 class Solution{
     public:
-    ListNode* reverseKGroup(ListNode*head, int k){
+    ListNode* reverseKGroup(ListNode* head, int k){
         ListNode dummy(0);
-        dummy.next = head;
-        ListNode* groupPrev = &dummy;
-        while(true){
-            //Find kth node
-            ListNode* kth = groupPrev;
-            for(int i = 0; i < k && kth != NULL; i++){
-                kth = kth->next;
+        ListNode* tail = &dummy;
+        while(head != NULL){
+            stack<ListNode*> st;
+            ListNode* curr = head;
+            int count = 0;
+
+            // Stores k nodes
+            while(curr != NULL && count < k){
+                st.push(curr);
+                curr = curr->next;
+                count++;
             }
-            //Less than k nodes remaining
-            if(kth == NULL)
+            //Incomplete group: attach unchanged
+            if(count < k){
+                tail->next = head;
                 break;
-            ListNode* groupNext = kth->next;
-            //Reverse current group
-            ListNode* prev = groupNext;
-            ListNode* curr = groupPrev->next;
-            while(curr != groupNext){
-                ListNode* nextNode=curr->next;
-                curr->next = prev;
-                prev = curr;
-                curr = nextNode;
             }
-        // Connect reversed group 
-        ListNode* temp = groupPrev->next;
-        groupPrev->next = kth;
-        groupPrev = temp;
+            //Reconnect nodes in reverse order 
+            while(!st.empty()){
+                tail->next = st.top();
+                st.pop();
+                tail = tail->next;
+            }
+            tail->next = curr;
+            head = curr;
         }
+        
         return dummy.next;
     }
 };
