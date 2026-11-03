@@ -6,11 +6,11 @@ public:
         int n = nums.size();
         int median = nums[n/2];
 
-        int moves = 0;
+        long long ans = 0;
 
-        for(int i = 0; i < n; i++){
-            moves += abs(nums[i]-median);
+        for(int x : nums){
+            ans += abs((long long)x - median);
         }
-        return moves;
+        return ans;
     }
 };
